@@ -1,0 +1,49 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: portfolio
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:rajaraoeedi20@gmail.com}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+      mail.smtp.connectiontimeout: 5000
+      mail.smtp.timeout: 5000
+      mail.smtp.writetimeout: 5000
+  datasource:
+    url: jdbc:h2:mem:portfolio;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+  h2:
+    console:
+      enabled: false
+
+# Allowed browser origins (React dev server + your deployed site)
+portfolio:
+  cors-origins: http://localhost:5173,http://localhost:3000
+  profile:
+    name: Rajarao Eedi
+    title: Senior Software Developer
+    tagline: Full Stack Developer | Java, Spring Boot, React.js, Microservices, REST APIs, AWS, Kafka
+    company: HCLTech
+    location: Hyderabad, India
+    email: rajaraoeedi20@gmail.com
+    phone: "+91-9652977919"
+    linkedin: https://www.linkedin.com/in/eedi-rajarao-56945025a
+    github: https://github.com/Rajaeedi20
+    summary: >
+      Full Stack Developer with 3+ years of experience designing, coding and testing
+      production-ready software in Java, Spring Boot, Spring Data JPA and Hibernate,
+      with strong exposure to RESTful services, microservices and CI/CD pipelines.
+      I build responsive React.js front-ends and reliable backend services, and enjoy
+      working across the stack, from database schema design (MySQL, MongoDB) to API
+      integration and UI delivery, in Agile, stakeholder-driven teams.
