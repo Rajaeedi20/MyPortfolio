@@ -7,9 +7,11 @@ services:
     plan: free
     healthCheckPath: /api/profile
     envVars:
-      - key: MAIL_USERNAME
-        value: rajaraoeedi20@gmail.com
-      - key: MAIL_PASSWORD
+      - key: GMAIL_CLIENT_ID
+        sync: false
+      - key: GMAIL_CLIENT_SECRET
+        sync: false
+      - key: GMAIL_REFRESH_TOKEN
         sync: false
       - key: CORS_ORIGINS
         value: https://rajaeedi20.github.io

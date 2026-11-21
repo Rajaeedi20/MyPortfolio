@@ -34,26 +34,42 @@ Open http://localhost:5173
 | GET    | /api/skills       | Skill groups                    |
 | POST   | /api/contact      | Save and email a contact message |
 
-Contact-form submissions are saved and emailed to the profile email address.
-For Gmail delivery, enable 2-Step Verification and create an App Password, then
-set the password in the same PowerShell window before starting the backend. The
-sender defaults to `rajaraoeedi20@gmail.com`; set `MAIL_USERNAME` only if you
-want to use a different SMTP account:
+Contact-form submissions are saved and emailed to the profile email address
+through the Gmail API. Create Google OAuth credentials and a refresh token
+authorized for the `https://www.googleapis.com/auth/gmail.send` scope. The
+authorized Google account must match the profile email. Set these values before
+starting the backend:
 
 ```powershell
-$env:MAIL_PASSWORD = "your-16-character-app-password"
+$env:GMAIL_CLIENT_ID = "your-oauth-client-id"
+$env:GMAIL_CLIENT_SECRET = "your-oauth-client-secret"
+$env:GMAIL_REFRESH_TOKEN = "your-oauth-refresh-token"
 cd backend
 mvn spring-boot:run
 ```
 
-Do not commit SMTP credentials. Other SMTP providers can be configured with
-`MAIL_HOST` and `MAIL_PORT` as well.
+To obtain the credentials:
 
-When deploying, add `MAIL_PASSWORD` to the **backend** service's environment
-variables (not the frontend). The default `MAIL_USERNAME` is
-`rajaraoeedi20@gmail.com`; override it only if it is not the mailbox authorized
-to send through your SMTP provider. Contact-form
-messages are delivered to `portfolio.profile.email` in
+1. Enable the Gmail API in a [Google Cloud project](https://console.cloud.google.com/).
+2. Configure the OAuth consent screen and create a **Web application** OAuth
+   client. Add `https://developers.google.com/oauthplayground` as an authorized
+   redirect URI.
+3. In the [OAuth 2.0 Playground](https://developers.google.com/oauthplayground/),
+   enable **Use your own OAuth credentials**, enter the client ID and secret,
+   authorize the scope `https://www.googleapis.com/auth/gmail.send`, and
+   exchange the code for tokens.
+4. Put the client ID, secret, and refresh token in the backend environment.
+
+The authorized Google account must match the profile email. Keep all OAuth
+values private. OAuth apps left in Testing mode issue refresh tokens that expire
+after seven days; publish the consent screen to In production for a persistent
+deployment. Google may show an unverified-app warning during personal use.
+
+Never commit OAuth credentials or refresh tokens.
+
+When deploying, add `GMAIL_CLIENT_ID`, `GMAIL_CLIENT_SECRET`, and
+`GMAIL_REFRESH_TOKEN` to the **backend** service's environment variables (not
+the frontend). Contact messages are delivered to `portfolio.profile.email` in
 `backend/src/main/resources/application.yml`. Redeploy/restart the backend
 after setting these values.
 
@@ -71,7 +87,8 @@ after setting these values.
   to enable form submissions. The Pages workflow reads the API URL from the
   `VITE_API_URL` repository variable.
 - **Backend on Render:** Create a Blueprint from this repository using
-  `render.yaml`, then enter the Gmail App Password when prompted. Add the
+  `render.yaml`, then add the Google OAuth credentials in the backend service's
+  environment settings. Add the
   deployed backend URL (without a trailing slash) as the `VITE_API_URL`
   repository variable under **Settings → Secrets and variables → Actions**,
   then rerun the Pages workflow.

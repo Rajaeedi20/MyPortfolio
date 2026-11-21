@@ -11,9 +11,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.MailException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestClientException;
 
 import java.time.Instant;
 import java.util.List;
@@ -61,7 +61,7 @@ public class PortfolioController {
 
         try {
             contactNotifications.send(req);
-        } catch (MailException ex) {
+        } catch (RestClientException | IllegalStateException ex) {
             log.error("Contact message was saved, but its email notification could not be delivered", ex);
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(Map.of("status", "received", "emailSent", "false",
