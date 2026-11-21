@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getProfile, getExperience, getProjects, getSkills } from "./api";
+import portfolioData from "./data/portfolioData";
 import Navbar from "./components/Navbar.jsx";
 import Hero from "./components/Hero.jsx";
 import About from "./components/About.jsx";
@@ -9,16 +10,19 @@ import Projects from "./components/Projects.jsx";
 import Contact from "./components/Contact.jsx";
 
 export default function App() {
-  const [data, setData] = useState(null);
+  const staticMode = import.meta.env.VITE_STATIC_PORTFOLIO === "true";
+  const [data, setData] = useState(staticMode ? portfolioData : null);
   const [error, setError] = useState("");
 
   useEffect(() => {
+    if (staticMode) return undefined;
     Promise.all([getProfile(), getExperience(), getProjects(), getSkills()])
       .then(([profile, experience, projects, skills]) =>
         setData({ profile, experience, projects, skills })
       )
       .catch(() => setError("Could not reach the API. Is the Spring Boot server running on port 8080?"));
-  }, []);
+    return undefined;
+  }, [staticMode]);
 
   useEffect(() => {
     if (!data) return undefined;
@@ -63,7 +67,7 @@ export default function App() {
         <Contact profile={profile} />
       </main>
       <footer className="footer">
-        © {new Date().getFullYear()} {profile.name} · Built with Spring Boot &amp; React
+        © {new Date().getFullYear()} {profile.name} · Built with React{staticMode ? "" : " & Spring Boot"}
       </footer>
     </>
   );

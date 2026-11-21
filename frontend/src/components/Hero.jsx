@@ -17,7 +17,7 @@ export default function Hero({ profile }) {
           </div>
         </div>
         <div className="photo-wrap" data-reveal>
-          <img src="/photo.jpg" alt={profile.name} className="photo" />
+          <img src={`${import.meta.env.BASE_URL}photo.jpg`} alt={profile.name} className="photo" />
           <span className="badge">Open to collaborate</span>
         </div>
       </div>

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { sendContact } from "../api";
 
 export default function Contact({ profile }) {
+  const contactFormEnabled = import.meta.env.VITE_CONTACT_FORM_ENABLED !== "false";
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [state, setState] = useState({ type: "idle", text: "" });
 
@@ -35,7 +36,9 @@ export default function Contact({ profile }) {
         <div data-reveal>
           <h3 className="title">Let's work together</h3>
           <p className="about-text">
-            Have a project, an opportunity or just want to say hi? Send a message and I'll reply soon.
+            {contactFormEnabled
+              ? "Have a project, an opportunity or just want to say hi? Send a message and I'll reply soon."
+              : "Have a project, an opportunity or just want to say hi? Send me an email and I'll reply soon."}
           </p>
           <ul className="contact-list">
             <li>✉️ <a href={`mailto:${profile.email}`}>Rajarao Eedi</a></li>
@@ -44,21 +47,30 @@ export default function Contact({ profile }) {
           </ul>
         </div>
 
-        <form className="card form" onSubmit={submit} data-reveal>
-          <label>Name
-            <input name="name" value={form.name} onChange={change} required maxLength={100} />
-          </label>
-          <label>Email
-            <input type="email" name="email" value={form.email} onChange={change} required maxLength={150} />
-          </label>
-          <label>Message
-            <textarea name="message" rows="5" value={form.message} onChange={change} required minLength={10} maxLength={2000} />
-          </label>
-          <button className="btn primary" disabled={state.type === "loading"}>
-            {state.type === "loading" ? "Sending…" : "Send message"}
-          </button>
-          {state.text && <p className={`msg ${state.type}`}>{state.text}</p>}
-        </form>
+        {contactFormEnabled ? (
+          <form className="card form" onSubmit={submit} data-reveal>
+            <label>Name
+              <input name="name" value={form.name} onChange={change} required maxLength={100} />
+            </label>
+            <label>Email
+              <input type="email" name="email" value={form.email} onChange={change} required maxLength={150} />
+            </label>
+            <label>Message
+              <textarea name="message" rows="5" value={form.message} onChange={change} required minLength={10} maxLength={2000} />
+            </label>
+            <button className="btn primary" disabled={state.type === "loading"}>
+              {state.type === "loading" ? "Sending…" : "Send message"}
+            </button>
+            {state.text && <p className={`msg ${state.type}`}>{state.text}</p>}
+          </form>
+        ) : (
+          <div className="card form" data-reveal>
+            <p className="about-text">This hosted version uses a static site, so the contact form is unavailable.</p>
+            <a className="btn primary" href={`mailto:${profile.email}?subject=Portfolio%20inquiry`}>
+              Email Rajarao Eedi
+            </a>
+          </div>
+        )}
       </div>
     </section>
   );
