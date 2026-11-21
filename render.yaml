@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: myportfolio-rajaeedi20-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free
+    healthCheckPath: /api/profile
+    envVars:
+      - key: MAIL_USERNAME
+        value: rajaraoeedi20@gmail.com
+      - key: MAIL_PASSWORD
+        sync: false
+      - key: CORS_ORIGINS
+        value: https://rajaeedi20.github.io

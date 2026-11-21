@@ -67,9 +67,14 @@ after setting these values.
 - **GitHub Pages:** In the repository's **Settings → Pages**, set the source
   to **GitHub Actions**. The workflow deploys the static portfolio to
   `https://rajaeedi20.github.io/MyPortfolio/` on pushes to `main`. GitHub Pages
-  cannot run the Spring Boot backend, so this hosted version shows portfolio
-  data bundled with the frontend and provides an email link instead of the
-  submission form. Deploy the backend separately to enable form submissions.
+  cannot run the Spring Boot backend, so the backend must be deployed separately
+  to enable form submissions. The Pages workflow reads the API URL from the
+  `VITE_API_URL` repository variable.
+- **Backend on Render:** Create a Blueprint from this repository using
+  `render.yaml`, then enter the Gmail App Password when prompted. Add the
+  deployed backend URL (without a trailing slash) as the `VITE_API_URL`
+  repository variable under **Settings → Secrets and variables → Actions**,
+  then rerun the Pages workflow.
 - **Frontend:** `npm run build` → host `dist/` on Netlify / Vercel / S3.
   Set `VITE_API_URL` to your backend URL before building.
 - **Backend:** `mvn clean package` → `java -jar target/portfolio-1.0.0.jar`

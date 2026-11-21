@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: ${PORT:8080}
 
 spring:
   application:
@@ -29,7 +29,7 @@ spring:
 
 # Allowed browser origins (React dev server + your deployed site)
 portfolio:
-  cors-origins: http://localhost:5173,http://localhost:3000
+  cors-origins: ${CORS_ORIGINS:http://localhost:5173,http://localhost:3000}
   profile:
     name: Rajarao Eedi
     title: Senior Software Developer
